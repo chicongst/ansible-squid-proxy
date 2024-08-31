@@ -17,11 +17,11 @@ cp group_vars/all.example group_vars/all hosts
 ------------
 
 Make sure you can SSH into the IP addresses listed in the hosts file. 
+```
 [squid_servers]
 1.2.3.4 ansible_user=ubuntu
 ```
 If you are using a PEM key for SSH, ensure the hosts file is configured with the following syntax:
-```
 ```
 [squid_servers]
 1.2.3.4 ansible_user=ubuntu ansible_ssh_private_key_file=/path/to/your-key.pem
