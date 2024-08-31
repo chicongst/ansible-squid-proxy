@@ -1,0 +1,6 @@
+---
+- name: Install Squid Proxy
+  apt:
+    name: squid
+    state: present
+    update_cache: yes

@@ -1,0 +1,19 @@
+http_port 31204
+
+acl all_ports port 1-65535
+http_access allow all_ports
+
+acl all_methods method GET POST PUT DELETE OPTIONS HEAD PATCH CONNECT
+http_access allow all_methods
+
+acl all src 0.0.0.0/0
+http_access allow all
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Squid proxy-caching web server
+auth_param basic credentialsttl 2 hours
+auth_param basic casesensitive on
+
+acl authenticated proxy_auth REQUIRED
+http_access allow authenticated

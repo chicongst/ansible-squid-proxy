@@ -1,0 +1,7 @@
+---
+- hosts: squid_servers
+  become: yes
+  roles:
+    - configure
+    - users
+    - install

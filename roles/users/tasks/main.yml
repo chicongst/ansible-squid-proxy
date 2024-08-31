@@ -1,0 +1,19 @@
+---
+- name: Install apache2-utils package
+  apt:
+    name: apache2-utils
+    state: present
+
+- name: Config passwd
+  file:
+    path: /etc/squid
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create password and add user
+  command: htpasswd -b -c /etc/squid/passwd {{ squid_username }} {{ squid_password }}
+  args:
+    creates: /etc/squid/passwd
+  tags: create_passwd_file

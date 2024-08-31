@@ -1,0 +1,21 @@
+---
+- name: Backup Squid config
+  copy:
+    src: /etc/squid/squid.conf
+    dest: /etc/squid/squid.conf.bak
+    remote_src: yes
+    backup: yes
+
+- name: Config Squid Proxy
+  template:
+    src: squid.conf.j2
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart Squid
+  systemd:
+    name: squid
+    enabled: yes
+    state: restarted

@@ -1,0 +1,2 @@
+[squid_servers]
+1.2.3.4 ansible_user=ubuntu
