@@ -4,3 +4,8 @@
     name: squid
     state: present
     update_cache: yes
+
+- name: Stop and remove UFW service
+  ansible.builtin.package:
+    name: ufw
+    state: absent
