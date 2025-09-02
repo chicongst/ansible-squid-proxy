@@ -1,6 +1,43 @@
----
 - hosts: squid_servers
   become: yes
+
+  pre_tasks:
+    - name: Disable CNF index
+      copy:
+        dest: /etc/apt/apt.conf.d/90disable-cnf
+        content: |
+          Acquire::IndexTargets::deb::CNF "false";
+          Acquire::IndexTargets::deb-src::CNF "false";
+
+    - name: Rewrite deb822 sources
+      copy:
+        dest: /etc/apt/sources.list.d/ubuntu.sources
+        mode: '0644'
+        content: |
+          Types: deb
+          URIs: http://archive.ubuntu.com/ubuntu
+          Suites: {{ ansible_distribution_release }} {{ ansible_distribution_release }}-updates
+          Components: main restricted universe multiverse
+          Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+          Types: deb
+          URIs: http://security.ubuntu.com/ubuntu
+          Suites: {{ ansible_distribution_release }}-security
+          Components: main restricted universe multiverse
+          Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+    - name: Remove old sources.list
+      file:
+        path: /etc/apt/sources.list
+        state: absent
+
+    - name: apt-get update (allow suite change + turn off CNF)
+      command: >
+        apt-get update
+        -o Acquire::AllowReleaseInfoChange::Suite=true
+        -o Acquire::IndexTargets::deb::CNF=false
+        -o Acquire::IndexTargets::deb-src::CNF=false
+    
   roles:
     - configure
     - users
